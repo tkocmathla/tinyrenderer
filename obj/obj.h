@@ -54,8 +54,7 @@ obj_model_t *obj_load_model(FILE *file) {
       ++vi;
     } else if (line[0] == 'f') {
       obj_face_t *f = &obj->faces[fi];
-      assert(sscanf(line, "f %d/%*d/%*d %d/%*d/%*d %d/%*d/%*d", &f->v0, &f->v1,
-                    &f->v2) == 3);
+      assert(sscanf(line, "f %d/%*d/%*d %d/%*d/%*d %d/%*d/%*d", &f->v0, &f->v1, &f->v2) == 3);
       // Convert 1-indexed values to 0-indexed.
       --f->v0;
       --f->v1;
@@ -67,4 +66,4 @@ obj_model_t *obj_load_model(FILE *file) {
   return obj;
 }
 
-#endif // TINYRENDERER_OBJ_OBJ_H
+#endif  // TINYRENDERER_OBJ_OBJ_H

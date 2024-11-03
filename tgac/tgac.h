@@ -28,10 +28,10 @@ typedef enum {
 
 /// Pixel type.
 typedef struct {
-  tgac_byte_t r; ///< Red
-  tgac_byte_t g; ///< Green
-  tgac_byte_t b; ///< Blue
-  tgac_byte_t a; ///< Alpha
+  tgac_byte_t r;  ///< Red
+  tgac_byte_t g;  ///< Green
+  tgac_byte_t b;  ///< Blue
+  tgac_byte_t a;  ///< Alpha
 } tgac_pixel_t;
 
 static const tgac_pixel_t TGAC_RED = {.r = 255, .g = 0, .b = 0, .a = 255};
@@ -48,14 +48,12 @@ static const tgac_pixel_t TGAC_WHITE = {.r = 255, .g = 255, .b = 255, .a = 255};
  * @param[in] height Image height in pixels.
  * @param[in] background An optional color used to initialize the image.
  */
-struct tgac_state_t *tgac_init(tgac_image_type_t type, tgac_short_t width,
-                               tgac_short_t height,
+struct tgac_state_t *tgac_init(tgac_image_type_t type, tgac_short_t width, tgac_short_t height,
                                const tgac_pixel_t *background);
 
 /* Sets the pixel at (x, y) to `pixel', where `x' is the column and `y' is the
  * row. */
-void tgac_set(struct tgac_state_t *tga, tgac_short_t x, tgac_short_t y,
-              tgac_pixel_t pixel);
+void tgac_set(struct tgac_state_t *tga, tgac_short_t x, tgac_short_t y, tgac_pixel_t pixel);
 
 /* Writes the TGA file described by `tga' to `file'. */
 void tgac_write(FILE *file, struct tgac_state_t *tga);
@@ -63,4 +61,4 @@ void tgac_write(FILE *file, struct tgac_state_t *tga);
 /* Pretty-prints the TGA header from `tga' to stdout. */
 void tgac_dump(struct tgac_state_t *tga);
 
-#endif // TINYRENDERER_TGAC_TGAC_H
+#endif  // TINYRENDERER_TGAC_TGAC_H

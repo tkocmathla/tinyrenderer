@@ -5,15 +5,14 @@
 #include "obj/obj.h"
 #include "tgac/tgac.h"
 
-#define SWAP(a, b, type)                                                       \
-  do {                                                                         \
-    type tmp = a;                                                              \
-    a = b;                                                                     \
-    b = tmp;                                                                   \
+#define SWAP(a, b, type) \
+  do {                   \
+    type tmp = a;        \
+    a = b;               \
+    b = tmp;             \
   } while (0)
 
-void line(int x0, int y0, int x1, int y1, struct tgac_state_t *tga,
-          tgac_pixel_t pixel) {
+void line(int x0, int y0, int x1, int y1, struct tgac_state_t *tga, tgac_pixel_t pixel) {
   bool steep = false;
   if (abs(x0 - x1) < abs(y0 - y1)) {
     SWAP(x0, y0, typeof(x0));
@@ -61,12 +60,12 @@ int main(int argc, char **argv) {
     obj_vertex_t *v1 = &obj->vertices[face->v1];
     obj_vertex_t *v2 = &obj->vertices[face->v2];
 
-    line((v0->x + 1.0) * halfw, (v0->y + 1.0) * halfh, (v1->x + 1.0) * halfw,
-         (v1->y + 1.0) * halfh, tga, TGAC_BLACK);
-    line((v1->x + 1.0) * halfw, (v1->y + 1.0) * halfh, (v2->x + 1.0) * halfw,
-         (v2->y + 1.0) * halfh, tga, TGAC_BLACK);
-    line((v2->x + 1.0) * halfw, (v2->y + 1.0) * halfh, (v0->x + 1.0) * halfw,
-         (v0->y + 1.0) * halfh, tga, TGAC_BLACK);
+    line((v0->x + 1.0) * halfw, (v0->y + 1.0) * halfh, (v1->x + 1.0) * halfw, (v1->y + 1.0) * halfh,
+         tga, TGAC_BLACK);
+    line((v1->x + 1.0) * halfw, (v1->y + 1.0) * halfh, (v2->x + 1.0) * halfw, (v2->y + 1.0) * halfh,
+         tga, TGAC_BLACK);
+    line((v2->x + 1.0) * halfw, (v2->y + 1.0) * halfh, (v0->x + 1.0) * halfw, (v0->y + 1.0) * halfh,
+         tga, TGAC_BLACK);
   }
 
   FILE *tga_file = fopen("test.tga", "wb");

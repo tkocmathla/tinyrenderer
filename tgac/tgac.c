@@ -26,8 +26,7 @@ typedef struct __attribute__((packed)) {
   tgac_byte_t image_descriptor;
 } tgac_header_t;
 
-static_assert(sizeof(tgac_header_t) == 18,
-              "tgac header size must be exactly 18 bytes");
+static_assert(sizeof(tgac_header_t) == 18, "tgac header size must be exactly 18 bytes");
 
 typedef struct tgac_state_t {
   tgac_header_t *header;
@@ -87,8 +86,8 @@ void tgac_write_pixels(FILE *file, tgac_state_t *tga) {
 // Public API functions //
 //////////////////////////
 
-tgac_state_t *tgac_init(tgac_image_type_t type, tgac_short_t width,
-                        tgac_short_t height, const tgac_pixel_t *background) {
+tgac_state_t *tgac_init(tgac_image_type_t type, tgac_short_t width, tgac_short_t height,
+                        const tgac_pixel_t *background) {
   tgac_state_t *tga = malloc(sizeof(tgac_state_t));
   tga->header = calloc(1, sizeof(tgac_header_t));
   tga->header->image_type = type;
@@ -108,8 +107,7 @@ tgac_state_t *tgac_init(tgac_image_type_t type, tgac_short_t width,
   return tga;
 }
 
-void tgac_set(tgac_state_t *tga, tgac_short_t x, tgac_short_t y,
-              tgac_pixel_t pixel) {
+void tgac_set(tgac_state_t *tga, tgac_short_t x, tgac_short_t y, tgac_pixel_t pixel) {
   tga->image[x + (y * tga->header->height)] = pixel;
 }
 
