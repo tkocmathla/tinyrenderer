@@ -30,7 +30,7 @@ obj_model_t* obj_load_model(FILE* file) {
     char *line = NULL;
     size_t len = 0;
     while (getline(&line, &len, file) != -1) {
-        if (line[0] == 'v') {
+        if (line[0] == 'v' && line[1] == ' ') {
             ++obj->nvertices;
         } else if (line[0] == 'f') {
             ++obj->nfaces;

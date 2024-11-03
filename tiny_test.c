@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
          (v0->y + 1.0) * halfh, tga, black);
   }
 
-  FILE *tga_file = fopen("./test.tga", "wb");
+  FILE *tga_file = fopen("test.tga", "wb");
   tgac_write(tga_file, tga);
   fclose(tga_file);
 }
