@@ -31,7 +31,7 @@ typedef struct {
   tgac_byte_t r; ///< Red
   tgac_byte_t g; ///< Green
   tgac_byte_t b; ///< Blue
-  tgac_byte_t a; ///< Alpha (opacity percentage)
+  tgac_byte_t a; ///< Alpha
 } tgac_pixel_t;
 
 static const tgac_pixel_t TGAC_RED = {.r = 255, .g = 0, .b = 0, .a = 255};
