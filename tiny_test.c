@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
     }
   }
 
-  FILE *obj_file = fopen("./african_head.obj", "r");
+  FILE *obj_file = fopen("data/african_head.obj", "r");
   assert(obj_file);
   obj_model_t *obj = obj_load_model(obj_file);
   fclose(obj_file);

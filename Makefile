@@ -14,4 +14,4 @@ tiny_test: tiny_test.o tgac/tgac.o
 .PHONY: clean test
 
 clean:
-	rm -f *.o *.a *.tga *_test
+	rm -f *.o tgac/*.o *.tga *_test
