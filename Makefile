@@ -11,7 +11,7 @@ tiny_test: tiny_test.c
 .PHONY: clean test
 
 clean:
-	rm -f *.o *.a *_test
+	rm -f *.o *.a *.tga *_test
 
 test: tiny_test
 	./tiny_test
