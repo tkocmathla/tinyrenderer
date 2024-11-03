@@ -2,8 +2,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "tgac.h"
-#include "wavefront.h"
+#include "obj/obj.h"
+#include "tgac/tgac.h"
 
 const tgac_pixel_t red = {.r = 255, .g = 0, .b = 0, .a = 255};
 const tgac_pixel_t black = {.r = 0, .g = 0, .b = 0, .a = 255};

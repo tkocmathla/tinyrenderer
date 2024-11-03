@@ -1,17 +1,17 @@
 CC=clang
-CFLAGS=-I. -I../tgac -L../tgac -ltgac -g
-DEPS=wavefront.h
+CFLAGS=-std=gnu18 -I. -g
+DEPS=obj/obj.h tgac/tgac.h
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-tiny_test: tiny_test.c
+tgac/tgac_test: tgac/tgac.o tgac/tgac_test.o
+	$(CC) -o $@ $^ $(CFLAGS)
+
+tiny_test: tiny_test.o tgac/tgac.o
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean test
 
 clean:
 	rm -f *.o *.a *.tga *_test
-
-test: tiny_test
-	./tiny_test
