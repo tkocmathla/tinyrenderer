@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/**
- * Internal utility definitions.
- */
+//////////////////////////////////
+// Internal utility definitions //
+//////////////////////////////////
 
 typedef struct __attribute__((packed)) {
   tgac_byte_t id_length;
@@ -34,6 +34,7 @@ typedef struct tgac_state_t {
   tgac_pixel_t *image;
 } tgac_state_t;
 
+// Reads and returns a short integer from `file'.
 tgac_short_t tgac_read_short(FILE *file) {
   tgac_short_t value = 0;
   value = fgetc(file);
@@ -41,11 +42,13 @@ tgac_short_t tgac_read_short(FILE *file) {
   return value;
 }
 
+// Writes `value' into `file' using little-endian ordering.
 void tgac_write_short(FILE *file, tgac_short_t value) {
   fputc(value & 0xFF, file);
   fputc((value >> 8) & 0xFF, file);
 }
 
+// Writes `header' in TGA format into `file'.
 void tgac_write_header(FILE *file, tgac_header_t *header) {
   rewind(file);
   fputc(header->id_length, file);
@@ -62,6 +65,7 @@ void tgac_write_header(FILE *file, tgac_header_t *header) {
   fputc(header->image_descriptor, file);
 }
 
+// Writes the image pixels from `tga' into `file'.
 void tgac_write_pixels(FILE *file, tgac_state_t *tga) {
   tgac_header_t *header = tga->header;
   tgac_pixel_t *image = tga->image;
@@ -79,12 +83,12 @@ void tgac_write_pixels(FILE *file, tgac_state_t *tga) {
   }
 }
 
-/**
- * Public API functions.
- */
+//////////////////////////
+// Public API functions //
+//////////////////////////
 
 tgac_state_t *tgac_init(tgac_image_type_t type, tgac_short_t width,
-                        tgac_short_t height) {
+                        tgac_short_t height, const tgac_pixel_t *background) {
   tgac_state_t *tga = malloc(sizeof(tgac_state_t));
   tga->header = calloc(1, sizeof(tgac_header_t));
   tga->header->image_type = type;
@@ -92,6 +96,15 @@ tgac_state_t *tgac_init(tgac_image_type_t type, tgac_short_t width,
   tga->header->height = height;
   tga->header->bits_per_pixel = 32;
   tga->image = calloc(width * height, sizeof(tgac_pixel_t));
+
+  // Initialize canvas to background color.
+  if (background) {
+    for (int y = 0; y < height; ++y) {
+      for (int x = 0; x < width; ++x) {
+        tgac_set(tga, x, y, *background);
+      }
+    }
+  }
   return tga;
 }
 

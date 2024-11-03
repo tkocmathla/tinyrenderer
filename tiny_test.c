@@ -5,10 +5,6 @@
 #include "obj/obj.h"
 #include "tgac/tgac.h"
 
-const tgac_pixel_t red = {.r = 255, .g = 0, .b = 0, .a = 255};
-const tgac_pixel_t black = {.r = 0, .g = 0, .b = 0, .a = 255};
-const tgac_pixel_t white = {.r = 255, .g = 255, .b = 255, .a = 255};
-
 #define SWAP(a, b, type)                                                       \
   do {                                                                         \
     type tmp = a;                                                              \
@@ -50,14 +46,7 @@ void line(int x0, int y0, int x1, int y1, struct tgac_state_t *tga,
 int main(int argc, char **argv) {
   int width = 800;
   int height = 800;
-  struct tgac_state_t *tga = tgac_init(TGAC_TRUE_COLOR, width, height);
-
-  // Initialize canvas to white.
-  for (int y = 0; y < height; ++y) {
-    for (int x = 0; x < width; ++x) {
-      tgac_set(tga, x, y, white);
-    }
-  }
+  struct tgac_state_t *tga = tgac_init(TGAC_TRUE_COLOR, width, height, &TGAC_WHITE);
 
   FILE *obj_file = fopen("data/african_head.obj", "r");
   assert(obj_file);
@@ -73,11 +62,11 @@ int main(int argc, char **argv) {
     obj_vertex_t *v2 = &obj->vertices[face->v2];
 
     line((v0->x + 1.0) * halfw, (v0->y + 1.0) * halfh, (v1->x + 1.0) * halfw,
-         (v1->y + 1.0) * halfh, tga, black);
+         (v1->y + 1.0) * halfh, tga, TGAC_BLACK);
     line((v1->x + 1.0) * halfw, (v1->y + 1.0) * halfh, (v2->x + 1.0) * halfw,
-         (v2->y + 1.0) * halfh, tga, black);
+         (v2->y + 1.0) * halfh, tga, TGAC_BLACK);
     line((v2->x + 1.0) * halfw, (v2->y + 1.0) * halfh, (v0->x + 1.0) * halfw,
-         (v0->y + 1.0) * halfh, tga, black);
+         (v0->y + 1.0) * halfh, tga, TGAC_BLACK);
   }
 
   FILE *tga_file = fopen("test.tga", "wb");
