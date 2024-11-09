@@ -39,17 +39,17 @@ void line(struct tgac_state_t* tga, int x0, int y0, int x1, int y1, tgac_pixel_t
   }
 }
 
-void sort_triangle_vertices(vec2i* v0, vec2i* v1, vec2i* v2) {
+void sort_triangle_vertices(vec3f* v0, vec3f* v1, vec3f* v2) {
   if (v0->y > v1->y) SWAP(*v0, *v1, typeof(*v0));
   if (v0->y > v2->y) SWAP(*v0, *v2, typeof(*v0));
   if (v1->y > v2->y) SWAP(*v1, *v2, typeof(*v0));
 }
 
-vec2i* triangle_bounding_box(struct tgac_state_t* tga, vec2i v0, vec2i v1, vec2i v2) {
+vec2f* triangle_bounding_box(struct tgac_state_t* tga, vec3f v0, vec3f v1, vec3f v2) {
   tgac_metadata_t meta = tgac_metadata(tga);
-  vec2i clamp = {.x = meta.width - 1, .y = meta.height - 1};
+  vec2f clamp = {.x = meta.width - 1.0f, .y = meta.height - 1.0f};
 
-  static vec2i box[2];
+  static vec2f box[2];
   box[0].x = MAX(0, MIN(MIN(v0.x, v1.x), v2.x));
   box[0].y = MAX(0, MIN(MIN(v0.y, v1.y), v2.y));
   box[1].x = MIN(clamp.x, MAX(MAX(v0.x, v1.x), v2.x));
@@ -58,7 +58,7 @@ vec2i* triangle_bounding_box(struct tgac_state_t* tga, vec2i v0, vec2i v1, vec2i
   return box;
 }
 
-vec3f barycentric(vec2i v0, vec2i v1, vec2i v2, int x, int y) {
+vec3f barycentric(vec3f v0, vec3f v1, vec3f v2, int x, int y) {
   vec3f _u = {.x = (float)v2.x - v0.x, .y = (float)v1.x - v0.x, .z = (float)v0.x - x};
   vec3f _v = {.x = (float)v2.y - v0.y, .y = (float)v1.y - v0.y, .z = (float)v0.y - y};
   vec3f uv = vec_cross(_u, _v);
@@ -72,9 +72,11 @@ vec3f barycentric(vec2i v0, vec2i v1, vec2i v2, int x, int y) {
   return bc;
 }
 
-void triangle(struct tgac_state_t* tga, vec2i v0, vec2i v1, vec2i v2, tgac_pixel_t color) {
+void triangle(struct tgac_state_t* tga, float* zbuffer, vec3f v0, vec3f v1, vec3f v2,
+              tgac_pixel_t color) {
+  tgac_metadata_t meta = tgac_metadata(tga);
   sort_triangle_vertices(&v0, &v1, &v2);
-  vec2i* box = triangle_bounding_box(tga, v0, v1, v2);
+  vec2f* box = triangle_bounding_box(tga, v0, v1, v2);
 
   for (int x = box[0].x; x < box[1].x; ++x) {
     for (int y = box[0].y; y < box[1].y; ++y) {
@@ -82,7 +84,15 @@ void triangle(struct tgac_state_t* tga, vec2i v0, vec2i v1, vec2i v2, tgac_pixel
       if (bc.x < 0 || bc.y < 0 || bc.z < 0) {
         continue;
       }
-      tgac_set(tga, x, y, color);
+      float z = 0;
+      z += bc.z * v0.z;
+      z += bc.z * v1.z;
+      z += bc.z * v2.z;
+      int i = x + y * meta.width;
+      if (zbuffer[i] < z) {
+        zbuffer[i] = z;
+        tgac_set(tga, x, y, color);
+      }
     }
   }
 }
