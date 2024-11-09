@@ -45,16 +45,13 @@ void sort_triangle_vertices(vec2i* v0, vec2i* v1, vec2i* v2) {
   if (v1->y > v2->y) SWAP(*v1, *v2, typeof(*v0));
 }
 
-vec2i* triangle_bounding_box(vec2i v0, vec2i v1, vec2i v2) {
-  static vec2i box[2];
-  // FIXME: get dims from tga state
-  vec2i clamp = {.x = 800 - 1, .y = 800 - 1};
+vec2i* triangle_bounding_box(struct tgac_state_t* tga, vec2i v0, vec2i v1, vec2i v2) {
+  tgac_metadata_t meta = tgac_metadata(tga);
+  vec2i clamp = {.x = meta.width - 1, .y = meta.height - 1};
 
-  // Lower-left
+  static vec2i box[2];
   box[0].x = MAX(0, MIN(MIN(v0.x, v1.x), v2.x));
   box[0].y = MAX(0, MIN(MIN(v0.y, v1.y), v2.y));
-
-  // Upper-right
   box[1].x = MIN(clamp.x, MAX(MAX(v0.x, v1.x), v2.x));
   box[1].y = MIN(clamp.y, MAX(MAX(v0.y, v1.y), v2.y));
 
@@ -77,7 +74,7 @@ vec3f barycentric(vec2i v0, vec2i v1, vec2i v2, int x, int y) {
 
 void triangle(struct tgac_state_t* tga, vec2i v0, vec2i v1, vec2i v2, tgac_pixel_t color) {
   sort_triangle_vertices(&v0, &v1, &v2);
-  vec2i* box = triangle_bounding_box(v0, v1, v2);
+  vec2i* box = triangle_bounding_box(tga, v0, v1, v2);
 
   for (int x = box[0].x; x < box[1].x; ++x) {
     for (int y = box[0].y; y < box[1].y; ++y) {

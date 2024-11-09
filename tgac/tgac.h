@@ -34,6 +34,13 @@ typedef struct {
   tgac_byte_t a;  ///< Alpha
 } tgac_pixel_t;
 
+/// Image metadata.
+typedef struct {
+  tgac_image_type_t image_type;
+  tgac_short_t width;
+  tgac_short_t height;
+} tgac_metadata_t;
+
 static const tgac_pixel_t TGAC_RED = {.r = 255, .g = 0, .b = 0, .a = 255};
 static const tgac_pixel_t TGAC_GREEN = {.r = 0, .g = 255, .b = 0, .a = 255};
 static const tgac_pixel_t TGAC_BLUE = {.r = 0, .g = 0, .b = 255, .a = 255};
@@ -50,6 +57,9 @@ static const tgac_pixel_t TGAC_WHITE = {.r = 255, .g = 255, .b = 255, .a = 255};
  */
 struct tgac_state_t *tgac_init(tgac_image_type_t type, tgac_short_t width, tgac_short_t height,
                                const tgac_pixel_t *background);
+
+/* Returns the given image's metadata. */
+tgac_metadata_t tgac_metadata(struct tgac_state_t *tga);
 
 /* Sets the pixel at (x, y) to `pixel'. */
 void tgac_set(struct tgac_state_t *tga, tgac_short_t x, tgac_short_t y, tgac_pixel_t pixel);

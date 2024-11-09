@@ -32,8 +32,8 @@ void draw_obj(const char *file) {
     vec2i v2s = {.x = (v2w->x + 1.0) * halfw, .y = (v2w->y + 1.0) * halfh};
 
     vec3f norm = vec_normalize(vec_cross(vec_sub(*v2w, *v0w), vec_sub(*v1w, *v0w)));
-    vec3f dir = {.x = 0, .y = 0, .z = -1};
-    float intensity = vec_prod(norm, dir);
+    vec3f light = {.x = 0, .y = 0, .z = -1};
+    float intensity = vec_prod(norm, light);
 
     if (intensity > 0) {
       tgac_pixel_t color = {

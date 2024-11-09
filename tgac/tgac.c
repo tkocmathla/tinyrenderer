@@ -107,6 +107,13 @@ tgac_state_t *tgac_init(tgac_image_type_t type, tgac_short_t width, tgac_short_t
   return tga;
 }
 
+tgac_metadata_t tgac_metadata(struct tgac_state_t *tga) {
+  tgac_metadata_t meta = {.width = tga->header->width,
+                          .height = tga->header->height,
+                          .image_type = tga->header->image_type};
+  return meta;
+}
+
 void tgac_set(tgac_state_t *tga, tgac_short_t x, tgac_short_t y, tgac_pixel_t pixel) {
   tga->image[x + (y * tga->header->height)] = pixel;
 }
