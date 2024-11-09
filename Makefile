@@ -1,5 +1,6 @@
 CC=clang
 CFLAGS=-std=gnu18 -I. -g
+LDFLAGS=-lm
 DEPS=obj/obj.h tgac/tgac.h
 
 %.o: %.c $(DEPS)
@@ -9,7 +10,7 @@ tgac/tgac_test: tgac/tgac.o tgac/tgac_test.o
 	$(CC) -o $@ $^ $(CFLAGS)
 
 tiny_test: tiny_test.o tgac/tgac.o
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
 .PHONY: clean test
 

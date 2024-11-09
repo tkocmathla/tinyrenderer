@@ -7,11 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct {
-  float x;
-  float y;
-  float z;
-} obj_vertex_t;
+#include "vec.h"
 
 typedef struct {
   int v0;
@@ -20,17 +16,11 @@ typedef struct {
 } obj_face_t;
 
 typedef struct {
-  obj_vertex_t *vertices;
+  vec3f *vertices;
   obj_face_t *faces;
   int nvertices;
   int nfaces;
 } obj_model_t;
-
-/// Constructs a vertex from coordinates.
-obj_vertex_t v(float x, float y, float z) {
-  obj_vertex_t _v = {.x = x, .y = y, .z = z};
-  return _v;
-}
 
 obj_model_t *obj_load_model(FILE *file) {
   // Read through the file once to get the count of items.
@@ -48,14 +38,16 @@ obj_model_t *obj_load_model(FILE *file) {
   rewind(file);
 
   // Now parse the actual file content to build the obj model.
-  obj->vertices = malloc(obj->nvertices * sizeof(obj_vertex_t));
+  obj->vertices = malloc(obj->nvertices * sizeof(vec3f));
+  assert(obj->vertices);
   obj->faces = malloc(obj->nfaces * sizeof(obj_face_t));
+  assert(obj->faces);
 
   int vi = 0;
   int fi = 0;
   while (getline(&line, &len, file) != -1) {
     if (line[0] == 'v' && line[1] == ' ') {
-      obj_vertex_t *v = &obj->vertices[vi];
+      vec3f *v = &obj->vertices[vi];
       assert(sscanf(line, "v %f %f %f", &v->x, &v->y, &v->z) == 3);
       ++vi;
     } else if (line[0] == 'f') {
