@@ -51,8 +51,7 @@ static const tgac_pixel_t TGAC_WHITE = {.r = 255, .g = 255, .b = 255, .a = 255};
 struct tgac_state_t *tgac_init(tgac_image_type_t type, tgac_short_t width, tgac_short_t height,
                                const tgac_pixel_t *background);
 
-/* Sets the pixel at (x, y) to `pixel', where `x' is the column and `y' is the
- * row. */
+/* Sets the pixel at (x, y) to `pixel'. */
 void tgac_set(struct tgac_state_t *tga, tgac_short_t x, tgac_short_t y, tgac_pixel_t pixel);
 
 /* Writes the TGA file described by `tga' to `file'. */

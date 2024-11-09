@@ -2,52 +2,16 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "draw.h"
 #include "obj/obj.h"
 #include "tgac/tgac.h"
 
-#define SWAP(a, b, type) \
-  do {                   \
-    type tmp = a;        \
-    a = b;               \
-    b = tmp;             \
-  } while (0)
-
-void line(int x0, int y0, int x1, int y1, struct tgac_state_t *tga, tgac_pixel_t pixel) {
-  bool steep = false;
-  if (abs(x0 - x1) < abs(y0 - y1)) {
-    SWAP(x0, y0, typeof(x0));
-    SWAP(x1, y1, typeof(x1));
-    steep = true;
-  }
-  if (x0 > x1) {
-    SWAP(x0, x1, typeof(x0));
-    SWAP(y0, y1, typeof(y0));
-  }
-  int dx = x1 - x0;
-  int dy = y1 - y0;
-  int derr = abs(dy) * 2;
-  int err = 0;
-  int y = y0;
-  for (float x = x0; x < x1; x++) {
-    if (steep) {
-      tgac_set(tga, y, x, pixel);
-    } else {
-      tgac_set(tga, x, y, pixel);
-    }
-    err += derr;
-    if (err > dx) {
-      y += (y1 > y0 ? 1 : -1);
-      err -= dx * 2;
-    }
-  }
-}
-
-int main(int argc, char **argv) {
+void draw_obj(const char *file) {
   int width = 800;
   int height = 800;
   struct tgac_state_t *tga = tgac_init(TGAC_TRUE_COLOR, width, height, &TGAC_WHITE);
 
-  FILE *obj_file = fopen("data/african_head.obj", "r");
+  FILE *obj_file = fopen(file, "r");
   assert(obj_file);
   obj_model_t *obj = obj_load_model(obj_file);
   fclose(obj_file);
@@ -60,15 +24,36 @@ int main(int argc, char **argv) {
     obj_vertex_t *v1 = &obj->vertices[face->v1];
     obj_vertex_t *v2 = &obj->vertices[face->v2];
 
-    line((v0->x + 1.0) * halfw, (v0->y + 1.0) * halfh, (v1->x + 1.0) * halfw, (v1->y + 1.0) * halfh,
-         tga, TGAC_BLACK);
-    line((v1->x + 1.0) * halfw, (v1->y + 1.0) * halfh, (v2->x + 1.0) * halfw, (v2->y + 1.0) * halfh,
-         tga, TGAC_BLACK);
-    line((v2->x + 1.0) * halfw, (v2->y + 1.0) * halfh, (v0->x + 1.0) * halfw, (v0->y + 1.0) * halfh,
-         tga, TGAC_BLACK);
+    // Convert world coords to screen coords
+    obj_vertex_t v0s = *v0;
+    v0s.x = (v0->x + 1.0) * halfw;
+    v0s.y = (v0->y + 1.0) * halfh;
+    obj_vertex_t v1s = *v1;
+    v1s.x = (v1->x + 1.0) * halfw;
+    v1s.y = (v1->y + 1.0) * halfh;
+    obj_vertex_t v2s = *v2;
+    v2s.x = (v2->x + 1.0) * halfw;
+    v2s.y = (v2->y + 1.0) * halfh;
+
+    tgac_pixel_t color = {.r = rand() % 255, .g = rand() % 255, .b = rand() % 255, .a = 255};
+    triangle(tga, v0s, v1s, v2s, color);
   }
 
-  FILE *tga_file = fopen("test.tga", "wb");
+  FILE *tga_file = fopen("obj_test.tga", "wb");
+  tgac_write(tga_file, tga);
+  fclose(tga_file);
+}
+
+int main(int argc, char **argv) {
+  draw_obj("data/african_head.obj");
+
+  struct tgac_state_t *tga = tgac_init(TGAC_TRUE_COLOR, 250, 250, &TGAC_BLACK);
+
+  triangle(tga, v(10, 70, 0), v(50, 160, 0), v(70, 80, 0), TGAC_RED);
+  triangle(tga, v(180, 50, 0), v(150, 1, 0), v(70, 180, 0), TGAC_WHITE);
+  triangle(tga, v(180, 150, 0), v(120, 160, 0), v(130, 180, 0), TGAC_GREEN);
+
+  FILE *tga_file = fopen("triangle_test.tga", "wb");
   tgac_write(tga_file, tga);
   fclose(tga_file);
 }

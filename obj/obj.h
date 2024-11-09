@@ -26,6 +26,12 @@ typedef struct {
   int nfaces;
 } obj_model_t;
 
+/// Constructs a vertex from coordinates.
+obj_vertex_t v(float x, float y, float z) {
+  obj_vertex_t _v = {.x = x, .y = y, .z = z};
+  return _v;
+}
+
 obj_model_t *obj_load_model(FILE *file) {
   // Read through the file once to get the count of items.
   obj_model_t *obj = malloc(sizeof(obj_model_t));
