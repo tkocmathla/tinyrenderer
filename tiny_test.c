@@ -13,8 +13,6 @@ void draw_obj(const char *file) {
 
   FILE *obj_file = fopen(file, "rb");
   assert(obj_file);
-  // FIXME: why is this necessary?
-  rewind(obj_file);
   obj_model_t *obj = obj_load_model(obj_file);
   fclose(obj_file);
 

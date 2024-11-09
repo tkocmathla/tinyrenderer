@@ -26,6 +26,9 @@ obj_model_t *obj_load_model(FILE *file) {
   // Read through the file once to get the count of items.
   obj_model_t *obj = malloc(sizeof(obj_model_t));
   assert(obj);
+  obj->nfaces = 0;
+  obj->nvertices = 0;
+
   char *line = NULL;
   size_t len = 0;
   while (getline(&line, &len, file) != -1) {
