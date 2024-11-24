@@ -25,11 +25,11 @@ typedef struct {
   float z;
 } vec3f;
 
-/// Constructs a vertex from coordinates.
-vec2i v(int x, int y) {
-  vec2i _v = {.x = x, .y = y};
-  return _v;
-}
+/// Convenience macros to create a vertex from coordinates.
+#define V2I(x, y) ((vec2i){(x), (y)})
+#define V3I(x, y, z) ((vec3i){(x), (y), (z)})
+#define V2F(x, y) ((vec2f){(x), (y)})
+#define V3F(x, y, z) ((vec3f){(x), (y), (z)})
 
 vec3f vec_sub(vec3f v0, vec3f v1) {
   vec3f v = {.x = v0.x - v1.x, .y = v0.y - v1.y, .z = v0.z - v1.z};
