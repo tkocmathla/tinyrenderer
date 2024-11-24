@@ -61,13 +61,22 @@ struct tgac_state_t *tgac_init(tgac_image_type_t type, tgac_short_t width, tgac_
 /* Returns the given image's metadata. */
 tgac_metadata_t tgac_metadata(struct tgac_state_t *tga);
 
+/* Returns the pixel at (x, y). */
+tgac_pixel_t tgac_get(struct tgac_state_t *tga, tgac_short_t x, tgac_short_t y);
+
 /* Sets the pixel at (x, y) to `pixel'. */
 void tgac_set(struct tgac_state_t *tga, tgac_short_t x, tgac_short_t y, tgac_pixel_t pixel);
+
+/* Reads the TGA file from `file' and returns the new state. */
+struct tgac_state_t *tgac_read(const char *file);
 
 /* Writes the TGA file described by `tga' to `file'. */
 void tgac_write(FILE *file, struct tgac_state_t *tga);
 
 /* Pretty-prints the TGA header from `tga' to stdout. */
 void tgac_dump(struct tgac_state_t *tga);
+
+/* Destroys the given tgac state. */
+void tgac_free(struct tgac_state_t *tga);
 
 #endif  // TINYRENDERER_TGAC_TGAC_H
